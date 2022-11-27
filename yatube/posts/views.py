@@ -128,6 +128,7 @@ def follow_index(request):
     }
     return render(request, template, context)
 
+
 @login_required
 def profile_follow(request, username):
     user = request.user
@@ -135,6 +136,7 @@ def profile_follow(request, username):
     if user != author:
         Follow.objects.get_or_create(user=user, author=author)
     return redirect('posts:profile', username=username)
+
 
 @login_required
 def profile_unfollow(request, username):
