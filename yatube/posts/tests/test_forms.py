@@ -2,7 +2,7 @@ from django.test import Client, TestCase
 from django.urls import reverse
 
 from ..forms import PostForm
-from ..models import Comment, Group, Post, User
+from ..models import Group, Post, User
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 
@@ -107,20 +107,3 @@ class PostFormTests(TestCase):
         self.assertEqual(post1.text, post_data['text'])
         self.assertEqual(post1.group.id, post_data['group'])
         self.assertTrue(post1.image, post_data['image'])
-
-    def test_comment_add_post_detail(self):
-        """Комментарий добавляется на страницу post_detail"""
-        comment_count = Comment.objects.count()
-        author = User.objects.create_user(username='fas')
-        post_data = {
-            'text': 'коммент',
-            'author': author
-        }
-        post1 = Post.objects.create(
-            author=self.user,
-            text='текст',
-        )
-        self.authorized_client.force_login(author)
-        post1.refresh_from_db()
-        self.assertEqual(Comment.objects.count(), comment_count + 1)
-        self.assertEqual(post1.comments.all(), post_data['text'])
