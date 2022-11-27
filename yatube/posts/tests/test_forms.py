@@ -122,5 +122,5 @@ class PostFormTests(TestCase):
         )
         self.authorized_client.force_login(author)
         post1.refresh_from_db()
-        self.assertEqual(Comment.objects.count(), comment_count+1)
+        self.assertEqual(Comment.objects.count(), comment_count + 1)
         self.assertEqual(post1.comments.all(), post_data['text'])
