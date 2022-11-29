@@ -69,6 +69,11 @@ class StaticURLTests(TestCase):
         self.assertRedirects(
             response, ('/auth/login/?next=/create/'))
 
+    def test_follow_url(self):
+        """Страница /follow доступна авторизованному пользователю."""
+        response = self.authorized_client.get('/follow/')
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
     def test_post_edit_url_redirect_anonymous(self):
         """Страница posts/<int:post_id>/edit/ перенаправляет анонима."""
         response = self.guest_client.get('/posts/1/edit/', follow=True)
@@ -82,7 +87,6 @@ class StaticURLTests(TestCase):
 
     def test_posts_post_edit_url(self):
         """Страница posts/post_id/edit/ доступна только автору."""
-        self.user = User.objects.get(username=self.user)
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)
         response = self.authorized_client.get(f'/posts/{self.post.id}/edit/')
